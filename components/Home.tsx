@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import { Terminal } from "@/components/terminal"
 import { RetroTV } from "@/components/retro-tv"
 import { ProjectCard } from "@/components/project-card"
