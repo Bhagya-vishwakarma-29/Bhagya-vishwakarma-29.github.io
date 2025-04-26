@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import * as motion from "motion/react-client"
 
-const page = () => {
+const Page = () => {
   const [col, setCol] = useState("red");
   const box = {
     width: 100,
@@ -32,4 +32,4 @@ const page = () => {
   
 }
 
-export default page
+export default Page
