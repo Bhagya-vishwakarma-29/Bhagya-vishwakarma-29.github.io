@@ -53,16 +53,16 @@ export function RetroTV({ children, className = "" }: RetroTVProps) {
       <div className="absolute bottom-0 left-1/2 transform translate-x-[-50%] translate-y-[190%] w-[40%] h-[5%] bg-gray-800 rounded-b-lg shadow-md"></div>
 
       {/* TV Controls */}
-      <div className="absolute right-[-5%] top-[20%] bottom-[20%] w-[8%] bg-gray-800 rounded-r-lg flex flex-col justify-center items-center gap-4 shadow-md">
+      {/* <div className="absolute right-[-5%] top-[20%] bottom-[20%] w-[8%] bg-gray-800 rounded-r-lg flex flex-col justify-center items-center gap-4 shadow-md">
         <div className="w-[70%] aspect-square rounded-full bg-gray-700 border-2 border-gray-600 shadow-inner"></div>
         <div className="w-[70%] aspect-square rounded-full bg-gray-700 border-2 border-gray-600 shadow-inner"></div>
         <div className="w-[70%] aspect-square rounded-full bg-gray-700 border-2 border-gray-600 shadow-inner"></div>
-      </div>
+      </div> */}
 
       {/* TV Label */}
-      <div className="absolute top-[-5%] left-[10%] right-[10%] h-[5%] bg-gray-800 rounded-t-lg flex justify-center items-center shadow-md">
+      {/* <div className="absolute top-[-5%] left-[10%] right-[10%] h-[5%] bg-gray-800 rounded-t-lg flex justify-center items-center shadow-md">
         <div className="text-xs text-cyan-400 font-mono tracking-widest">DEV_TERMINAL</div>
-      </div>
+      </div> */}
 
       {/* TV Power Button */}
       {/* <div className="absolute bottom-[5%] right-[10%] w-[5%] aspect-square">

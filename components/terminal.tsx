@@ -12,15 +12,17 @@ type CommandHistory = {
 export function Terminal() {
   const [input, setInput] = useState("")
   const [cursorVisible, setCursorVisible] = useState(true)
-  const [history, setHistory] = useState<CommandHistory[]>([{command: "ls", output: "projects/  experience/  Skills/  contact/  about.txt"}]) ; 
+  const [history, setHistory] = useState<CommandHistory[]>([]) ; 
   const [currentPath, setCurrentPath] = useState("~")
   const [introComplete, setIntroComplete] = useState(false)
   const [introText, setIntroText] = useState("")
+  const [suggestion, setSuggestion] = useState("")
+  const [autoTyping, setAutoTyping] = useState(true)
 
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const fullIntroText = `Welcome to DevTerminal v1.0.0
+  const fullIntroText = `Welcome to My Portfolio v1.0.0
 © 2025 Portfolio OS
 Type 'help' to see available commands.
 
@@ -131,12 +133,12 @@ Ready.
     "~/contact/email.txt": {
       type: "file",
       content:
-        "Email Contact:\n\nFor professional inquiries: hello@devterminal.com\nFor support requests: support@devterminal.com",
+        "Email Contact:\n\nFor professional inquiries: hello@bhagyavishwakarma.com\nFor support requests: support@bhagyavishwakarma.com",
     },
     "~/contact/social.txt": {
       type: "file",
       content:
-        "Social Media:\n\nGitHub: https://github.com/devterminal\nLinkedIn: https://linkedin.com/in/devterminal\nTwitter: https://twitter.com/devterminal\nDev.to: https://dev.to/devterminal",
+        "Social Media:\n\nGitHub: https://github.com/bhagyavishwakarma\nLinkedIn: https://linkedin.com/in/bhagyavishwakarma\nTwitter: https://twitter.com/bhagyavishwakarma\nDev.to: https://dev.to/bhagyavishwakarma",
     },
     "~/contact/form.txt": {
       type: "file",
@@ -160,8 +162,20 @@ Ready.
   experience          List work experience
   contact             Show contact information
   open [project]      Open project in new tab
+  whoami              Display user information
   help                Display this help message
 `
+    },
+    whoami: () => {
+      return `Name: Bhagya Vishwakarma
+Role: Full-Stack Developer
+Location: India
+Interests: Web Development, UI/UX Design, Problem Solving
+Skills: React, Next.js, TypeScript, Node.js, MongoDB
+Education: Bachelor's in Computer Science
+Experience: 2+ years in web development
+
+.`
     },
     ls: (args: string[]) => {
       let path = currentPath
@@ -232,6 +246,9 @@ Ready.
     },
     clear: () => {
       setHistory([])
+      setIntroText("")
+      // setIntroComplete(false)
+      setAutoTyping(true)
       return ""
     },
     about: () => {
@@ -353,7 +370,7 @@ Ready.
     }
   }
 
-  // Intro text typing effect
+  // Intro text typing effect 
   useEffect(() => {
     if (introComplete) return
 
@@ -361,12 +378,15 @@ Ready.
     const typingInterval = setInterval(() => {
       if (index < fullIntroText.length) {
         setIntroText((prev) => prev + fullIntroText.charAt(index))
-        index++
-      } else {
+        setTimeout(() => {
+            index++
+        }, 1);
+      } 
+      else {
         clearInterval(typingInterval)
         setIntroComplete(true)
       }
-    }, 30)
+    }, 20)
 
     return () => clearInterval(typingInterval)
   }, [introComplete, fullIntroText])
@@ -386,6 +406,68 @@ Ready.
       inputRef.current.focus()
     }
   }, [introComplete])
+
+  // Auto-typing effect for initial whoami command
+  useEffect(() => {
+    if (!introComplete || !autoTyping) return
+
+    const whoamiText = "Who am I?"
+    let currentIndex = 0
+    const typingInterval = setInterval(() => {
+      if (currentIndex < whoamiText.length) {
+        setInput(prev => prev + whoamiText[currentIndex])
+        setTimeout(() => {
+          currentIndex++;
+        }, 10);
+      } 
+      else {
+        clearInterval(typingInterval)
+        setTimeout(() => {
+          const newCommand = {
+            command: "whoami",
+            output: `Name: Bhagya Vishwakarma\nRole: Full-Stack Developer\nLocation: India\nInterests: Web Development, UI/UX Design, Problem Solving\n\n.`
+          }
+          setHistory([newCommand])
+          setInput("")
+          setAutoTyping(false)
+        }, 500)
+      }
+    }, 200)
+
+    return () => clearInterval(typingInterval)
+  }, [introComplete, autoTyping])
+
+  // Add project names for suggestions
+  const projectNames = [
+    "ecommerce",
+    "ai-generator",
+    "chat-app",
+    "task-manager",
+    "portfolio",
+    "weather-app"
+  ]
+
+  // Function to get suggestion based on input
+  const getSuggestion = (input: string) => {
+    if (!input) return ""
+    
+    // Check if input starts with a command
+    const command = input.split(" ")[0]
+    if (command === "open") {
+      const projectInput = input.split(" ")[1] || ""
+      const matchingProject = projectNames.find(name => 
+        name.toLowerCase().startsWith(projectInput.toLowerCase())
+      )
+      return matchingProject ? `open ${matchingProject}` : ""
+    }
+    
+    return ""
+  }
+
+  // Update suggestion when input changes
+  useEffect(() => {
+    setSuggestion(getSuggestion(input))
+  }, [input])
 
   return (
     <div
@@ -420,25 +502,38 @@ Ready.
 
         {/* Current input line */}
         {introComplete && (
-          <form onSubmit={handleSubmit} className="flex items-center">
+          <form onSubmit={handleSubmit} className="flex items-center relative">
             <span className="text-green-400 mr-2">user@portfolio</span>
             <span className="text-cyan-400 mr-2">{currentPath}</span>
             <span className="text-gray-400">$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'ArrowUp' && history.length > 0) {
-                  setInput(history[history.length - 1].command)
-                }
-              }}
-              className="ml-2 bg-transparent border-none outline-none text-cyan-400 flex-1 min-w-0"
-              autoFocus
-              autoComplete="off"
-              spellCheck="false"
-            />
+            <div className="ml-2 flex-1 relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp' && history.length > 0) {
+                    setInput(history[history.length - 1].command)
+                  }
+                  // Accept suggestion on Tab
+                  if (e.key === 'Tab' && suggestion) {
+                    e.preventDefault()
+                    setInput(suggestion)
+                  }
+                }}
+                className="bg-transparent border-none outline-none text-cyan-400 w-full"
+                autoFocus
+                autoComplete="off"
+                spellCheck="false"
+                disabled={autoTyping}
+              />
+              {suggestion && (
+                <div className="absolute left-0 top-0 pointer-events-none text-gray-500">
+                  {suggestion}
+                </div>
+              )}
+            </div>
             <span className={`w-2 h-4 bg-cyan-400 ml-1 ${cursorVisible ? "opacity-100" : "opacity-0"}`}></span>
           </form>
         )}
