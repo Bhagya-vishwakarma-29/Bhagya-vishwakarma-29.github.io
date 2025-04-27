@@ -19,6 +19,23 @@ export function Terminal() {
   const [suggestion, setSuggestion] = useState("")
   const [autoTyping, setAutoTyping] = useState(true)
 
+  // List of available commands
+  const availableCommands = [
+    "ls",
+    "cd",
+    "cat",
+    "pwd",
+    "clear",
+    "about",
+    "projects",
+    "skills",
+    "experience",
+    "contact",
+    "open",
+    "whoami",
+    "help"
+  ]
+
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -461,7 +478,12 @@ Experience: 2+ years in web development
       return matchingProject ? `open ${matchingProject}` : ""
     }
     
-    return ""
+    // Find matching commands
+    const matchingCommand = availableCommands.find(cmd => 
+      cmd.toLowerCase().startsWith(command.toLowerCase())
+    )
+    
+    return matchingCommand ? matchingCommand : ""
   }
 
   // Update suggestion when input changes

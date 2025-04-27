@@ -33,7 +33,7 @@ export default function Home() {
       <Navbar isDevMode={isDevMode} onToggleMode={() => setIsDevMode(!isDevMode)} />
       
       {/* Hero Section */}
-      <section id="home" className="relative t-20 h-screen flex flex-col items-center justify-center overflow-hidden">
+      <section id="home" className="relative pt-24 h-screen flex flex-col items-center justify-center overflow-hidden">
         <SectionAnimation>
           <div className="absolute inset-0 bg-gradient-to-b from-cyan-950/20 to-black/90 z-0"></div>
           <div className="container mx-auto relative z-[5] px-4 md:px-6 flex flex-col items-center">

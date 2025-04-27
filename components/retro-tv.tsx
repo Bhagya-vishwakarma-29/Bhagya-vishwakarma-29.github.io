@@ -49,8 +49,8 @@ export function RetroTV({ children, className = "" }: RetroTVProps) {
       </div>
 
       {/* TV Stand */}
-      <div className="absolute bottom-0 left-1/2 transform translate-x-[-50%] translate-y-[95%] w-[4%] h-[10%] bg-gray-800 rounded-b-lg shadow-md"></div>
-      <div className="absolute bottom-0 left-1/2 transform translate-x-[-50%] translate-y-[190%] w-[40%] h-[5%] bg-gray-800 rounded-b-lg shadow-md"></div>
+      <div className="absolute bottom-0 left-1/2 transform translate-x-[-50%] translate-y-[95%] z-[-2] w-[4%] h-[10%] bg-gray-800 rounded-lg shadow-md"></div>
+      <div className="absolute bottom-0 left-1/2 transform translate-x-[-50%] z-[-1] translate-y-[180%] w-[40%] h-[10%] bg-gray-800 rounded-lg shadow-md"></div>
 
       {/* TV Controls */}
       {/* <div className="absolute right-[-5%] top-[20%] bottom-[20%] w-[8%] bg-gray-800 rounded-r-lg flex flex-col justify-center items-center gap-4 shadow-md">
